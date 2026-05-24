@@ -1,4 +1,4 @@
-import { supabase } from '../utils/supabase.js';
+import { supabase, createAuthClient } from '../utils/supabase.js';
 import { conflict, unauthorized, AppError } from '../utils/AppError.js';
 import { env } from '../config/env.js';
 import fs from 'fs';
@@ -70,7 +70,8 @@ export const register = async ({ username, email, password, role, brand_name, in
   if (profileError) throw new AppError('Profile insert failed: ' + profileError.message, 500, 'DB_ERROR');
 
   // Sign in immediately to get session tokens
-  const { data: sessionData, error: sessionError } = await supabase.auth.signInWithPassword({ email, password });
+  const authClient = createAuthClient();
+  const { data: sessionData, error: sessionError } = await authClient.auth.signInWithPassword({ email, password });
   if (sessionError) throw new AppError(sessionError.message, 500, 'SESSION_ERROR');
 
   return {
@@ -114,7 +115,8 @@ export const login = async ({ email: identifier, password }) => {
   }
 
   console.log('LOGIN ATTEMPT:', loginEmail);
-  const { data, error } = await supabase.auth.signInWithPassword({ email: loginEmail, password });
+  const authClient = createAuthClient();
+  const { data, error } = await authClient.auth.signInWithPassword({ email: loginEmail, password });
   console.log('SUPABASE LOGIN ERROR:', error);
   console.log('SUPABASE LOGIN DATA:', data?.user?.id);
   if (error) throw unauthorized('Invalid email or password');
@@ -145,7 +147,8 @@ export const refreshToken = async (refresh_token) => {
   if (isLocalAuth) {
     return { access_token: 'local-token-refreshed', expires_in: 3600 };
   }
-  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
+  const authClient = createAuthClient();
+  const { data, error } = await authClient.auth.refreshSession({ refresh_token });
   if (error) throw unauthorized('Invalid refresh token');
   return {
     access_token:  data.session.access_token,

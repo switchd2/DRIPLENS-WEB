@@ -38,6 +38,8 @@ import AppliedCampaignsPage from './pages/AppliedCampaignsPage';
 import DashboardPage from './pages/DashboardPage';
 import EarningsPage from './pages/EarningsPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ForBrandsPage from './pages/ForBrandsPage';
+import ForCreatorsPage from './pages/ForCreatorsPage';
 
 // Footer Pages - Product
 import FeaturesPage from './pages/FeaturesPage';
@@ -88,6 +90,7 @@ const AppContent = () => {
   const isDriplens = location.pathname.startsWith('/driplens');
   const isDM = location.pathname.startsWith('/dm');
   const isAuth = location.pathname.startsWith('/auth');
+  const isLanding = location.pathname === '/' || location.pathname === '/driplens';
   const isDashboard = location.pathname.startsWith('/dashboard') || 
                       location.pathname === '/earnings' || 
                       location.pathname === '/messages' || 
@@ -96,11 +99,11 @@ const AppContent = () => {
                       location.pathname === '/opportunities/new' ||
                       isDM;
 
-  const showNavbar = !isDashboard;
+  const showNavbar = !isDashboard && !isAuth && !isLanding;
 
   return (
     <div className={isDriplens ? "bg-[#050508] min-h-screen text-white" : "min-h-screen flex flex-col bg-[var(--color-brand-bg)] text-[var(--color-brand-body)]"}>
-      {showNavbar ? <Navbar /> : <DashboardNav />}
+      {showNavbar ? <Navbar /> : (isDashboard ? <DashboardNav /> : null)}
       <main className="flex-grow pt-24 md:pt-32">
         <Routes>
           {/* Driplens Landing */}
@@ -109,6 +112,8 @@ const AppContent = () => {
           {/* Public */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/for-brands" element={<ForBrandsPage />} />
+          <Route path="/for-creators" element={<ForCreatorsPage />} />
           <Route path="/creators" element={<CreatorsPage />} />
           <Route path="/brands" element={<BrandsPage />} />
           <Route path="/opportunities" element={<OpportunitiesPage />} />

@@ -1,199 +1,138 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import AnimatedButton from '../components/AnimatedButton';
-import Aurora from '../components/Aurora/Aurora';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 import './agency.css';
 
-const faqs = [
-  { question: "What is Driplens?", answer: "Driplens is the professional meritocracy for creators. We focus on talent over hype, connecting the best creators directly with innovative brands." },
-  { question: "Is this for me (creator or brand)?", answer: "If you value high-quality creative work and professional workflows, yes. Creators get discovered based on portfolio merit, and brands get access to top-tier verified talent." },
-  { question: "How do I earn?", answer: "Creators earn through milestone-based workflows and zero-ambiguity contracts directly on the platform." },
-  { question: "Can beginners win here?", answer: "Absolutely. Our discovery engine is purely merit-based. If your work is exceptional, it will speak for itself regardless of your industry connections." },
-  { question: "Do I need followers to start?", answer: "No. Unlike other platforms, we focus entirely on the quality of your portfolio. Your follower count does not dictate your professional value here." },
-];
-
 export default function LandingPage() {
-  const [openFaq, setOpenFaq] = useState(null);
-
-  const toggleFaq = (index) => {
-    setOpenFaq(openFaq === index ? null : index);
-  };
   return (
-    <div className="agency-home">
+    <div className="min-h-screen bg-[#030205] text-white overflow-hidden relative selection:bg-red-500 selection:text-white font-sans flex flex-col justify-between">
       <Helmet>
-        <title>Driplens Talent Over Hype</title>
-        <meta name="description" content="Talent Over Hype" />
+        <title>Driplens — Choose Your Role</title>
+        <meta name="description" content="AI-powered creator-brand collaboration platform. Select your role to get started." />
       </Helmet>
 
-      {/* ── Hero ── */}
-      <section className="agency-hero" style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
-          <Aurora
-            colorStops={["#0540F2", "#F072F2", "#0554F2"]}
-            blend={0.8}
-            amplitude={1.2}
-          />
-        </div>
+      {/* ── Background Glow Streaks & Gradients ── */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        {/* Neon Purple Ambient Glow */}
+        <div className="absolute top-[-100px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gradient-to-r from-purple-600/20 to-pink-500/10 blur-[130px]" />
+        {/* Neon Red Ambient Glow */}
+        <div className="absolute top-[200px] right-[-200px] w-[600px] h-[600px] rounded-full bg-gradient-to-r from-red-600/20 to-purple-600/10 blur-[150px]" />
+        {/* Cyber Diagonal Light Streaks */}
+        <div className="absolute top-[10%] left-[20%] w-[1px] h-[500px] bg-gradient-to-b from-transparent via-purple-500/40 to-transparent rotate-[35deg] blur-[2px]" />
+        <div className="absolute top-[15%] right-[20%] w-[1px] h-[600px] bg-gradient-to-b from-transparent via-red-500/30 to-transparent rotate-[-35deg] blur-[2px]" />
+      </div>
 
-        <div className="agency-hero-content" style={{ position: 'relative', zIndex: 10 }}>
-          <motion.div
-            className="text-block text-block-1"
-            initial={{ opacity: 0, x: -100, rotate: -10 }}
-            animate={{ opacity: 1, x: -50, rotate: -3 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
+      {/* ── Header / Navigation ── */}
+      <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-[#030205]/40 border-b border-white/5 py-4 px-6 md:px-12 flex justify-between items-center">
+        <Link to="/" className="text-xl md:text-2xl font-black tracking-tighter uppercase text-white hover:opacity-90 flex items-center gap-2">
+          <span className="w-3 h-3 rounded-full bg-gradient-to-r from-red-500 to-purple-600 animate-pulse" />
+          DRIPLENS
+        </Link>
+        <nav className="hidden md:flex gap-8 text-[10px] font-black uppercase tracking-widest text-gray-400">
+          <Link to="/for-brands" className="hover:text-white transition">For Brands</Link>
+          <Link to="/for-creators" className="hover:text-white transition">For Creators</Link>
+        </nav>
+        <div className="flex gap-4">
+          <Link to="/auth" className="px-5 py-2 border border-white/10 rounded-full font-black uppercase text-[10px] tracking-widest bg-white/5 hover:bg-white/10 transition">
+            Sign In
+          </Link>
+          <Link to="/auth?mode=register" className="px-5 py-2 rounded-full font-black uppercase text-[10px] tracking-widest bg-gradient-to-r from-red-500 to-purple-600 hover:opacity-95 shadow-[0_0_15px_rgba(239,68,68,0.3)] transition text-white">
+            Get Started
+          </Link>
+        </div>
+      </header>
+
+      {/* ── Main Choice Container ── */}
+      <main className="relative z-10 pt-32 pb-16 px-6 md:px-12 max-w-6xl w-full mx-auto my-auto flex flex-col items-center justify-center">
+        {/* Floating Accent Tag */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="px-4 py-1.5 rounded-full border border-red-500/30 bg-red-500/10 text-red-400 text-[10px] font-black uppercase tracking-widest mb-6 text-center"
+        >
+          ⚡ The Future of Creator Collaborations
+        </motion.div>
+
+        {/* Title */}
+        <h2 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase text-center max-w-3xl leading-tight mb-2 text-white">
+          CHOOSE YOUR ROLE IN DRIPLENS
+        </h2>
+        <p className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-widest text-center mb-12">
+          Whether you're creating or hiring—start here.
+        </p>
+
+        {/* Two Options Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl z-20">
+          {/* Option 1: Brand */}
+          <Link 
+            to="/for-brands"
+            className="group bg-white/5 border border-white/10 rounded-[32px] p-6 flex flex-col transition-all duration-300 hover:border-red-500/50 hover:shadow-[0_0_40px_rgba(239,68,68,0.25)] hover:-translate-y-2 text-left"
           >
-            <h1>THE PROFESSIONAL</h1>
-          </motion.div>
-          <motion.div
-            className="text-block text-block-2"
-            initial={{ opacity: 0, x: 100, rotate: 10 }}
-            animate={{ opacity: 1, x: 50, rotate: 2 }}
-            transition={{ duration: 0.7, delay: 0.1, ease: 'easeOut' }}
+            {/* Image Container */}
+            <div className="w-full aspect-[4/3] rounded-2xl border border-white/10 overflow-hidden bg-white/5 mb-6">
+              <img 
+                src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600&auto=format&fit=crop&q=80" 
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:filter-none grayscale"
+                alt="I'm a Brand" 
+              />
+            </div>
+
+            {/* Title */}
+            <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-2 flex items-center justify-between">
+              I'm a Brand
+              <ArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 text-red-500" size={20} />
+            </h3>
+
+            {/* Description */}
+            <p className="text-xs font-bold text-gray-400 leading-relaxed">
+              Find the perfect creators for your campaigns, send briefs, and manage collaborations all in one place.
+            </p>
+          </Link>
+
+          {/* Option 2: Creator */}
+          <Link 
+            to="/for-creators"
+            className="group bg-white/5 border border-white/10 rounded-[32px] p-6 flex flex-col transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_40px_rgba(168,85,247,0.3)] hover:-translate-y-2 text-left"
           >
-            <h1>MERITOCRACY</h1>
-          </motion.div>
-          <motion.div
-            className="text-block-sub cursor-pointer"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 20 }}
-            whileHover={{
-              scale: 1.05,
-              rotate: -2,
-              backgroundColor: "var(--color-brand-accent)",
-              boxShadow: "8px 8px 0px rgba(0,0,0,1)",
-              y: 15
-            }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            style={{
-              border: '2px solid white',
-              boxShadow: "4px 4px 0px rgba(0,0,0,0.5)"
-            }}
-          >
-            <Link to="/auth" style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}>
-              <p>JOIN NOW</p>
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── About meta ── */}
-      <section className="agency-about">
-        <div className="agency-about-meta">
-          <span>CREATOR PLATFORM</span>
-          <span>LAUNCHING Q3 2026</span>
-          <span>GLOBAL NETWORK</span>
-          <span>LONDON / NYC / TOKYO</span>
-        </div>
-
-        <div className="agency-about-header">
-          <h2>WE CONNECT AMBITIOUS CREATORS WITH<br />THE WORLD'S MOST INNOVATIVE BRANDS.</h2>
-        </div>
-
-        <div className="agency-team-grid">
-          <div className="team-cell">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop"
-              alt="Alex Rivier"
-            />
-            <div className="team-info">
-              <h3>ALEX RIVIER</h3>
-              <p>CINEMATOGRAPHER</p>
+            {/* Image Container */}
+            <div className="w-full aspect-[4/3] rounded-2xl border border-white/10 overflow-hidden bg-white/5 mb-6">
+              <img 
+                src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80" 
+                className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105 group-hover:filter-none grayscale"
+                alt="I'm a Creator" 
+              />
             </div>
+
+            {/* Title */}
+            <h3 className="text-2xl font-black uppercase tracking-tight text-white mb-2 flex items-center justify-between">
+              I'm a Creator
+              <ArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 text-purple-500" size={20} />
+            </h3>
+
+            {/* Description */}
+            <p className="text-xs font-bold text-gray-400 leading-relaxed">
+              Showcase your content, set your rates, and get discovered by top brands looking to collaborate.
+            </p>
+          </Link>
+        </div>
+      </main>
+
+      {/* ── Footer ── */}
+      <footer className="relative z-10 py-8 px-6 md:px-12 border-t border-white/5 bg-[#030205]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-black uppercase tracking-widest text-gray-500">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-red-500 to-purple-600" />
+            <span>DRIPLENS © 2026. All rights reserved.</span>
           </div>
-          <div className="team-cell">
-            <img
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=500&auto=format&fit=crop"
-              alt="Marcus Thorne"
-            />
-            <div className="team-info">
-              <h3>MARCUS THORNE</h3>
-              <p>3D MOTION ARTIST</p>
-            </div>
-          </div>
-          <div className="team-cell">
-            <img
-              src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop"
-              alt="Sarah Chen"
-            />
-            <div className="team-info">
-              <h3>SARAH CHEN</h3>
-              <p>BRAND IDENTITY</p>
-            </div>
+          <div className="flex gap-8">
+            <a href="#" className="hover:text-white transition">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition">Terms of Service</a>
+            <a href="#" className="hover:text-white transition">Instagram</a>
+            <a href="#" className="hover:text-white transition">X.com</a>
           </div>
         </div>
-      </section>
-
-      {/* ── Features ── */}
-      <section className="agency-services">
-        <div className="services-header">
-          <div className="diamond-icon"></div>
-          <h2>PLATFORM FEATURES</h2>
-        </div>
-
-        <div className="services-list flex flex-col w-full max-w-4xl mx-auto">
-          {faqs.map((faq, index) => (
-            <div 
-              key={index} 
-              className="border-b border-gray-300 py-6 px-4 cursor-pointer hover:bg-gray-50 transition-colors duration-300 group"
-              onClick={() => toggleFaq(index)}
-            >
-              <div className="flex justify-between items-center w-full group-hover:translate-x-2 transition-transform duration-300">
-                <h3 className="text-xl md:text-2xl font-bold m-0">{faq.question}</h3>
-                <motion.div
-                  animate={{ rotate: openFaq === index ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <ChevronDown size={28} strokeWidth={3} className="text-black" />
-                </motion.div>
-              </div>
-              
-              <AnimatePresence>
-                {openFaq === index && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <p className="mt-4 text-[#666] leading-relaxed text-lg font-medium">
-                      {faq.answer}
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── CTA Section ── */}
-      <section className="agency-cta">
-        <div className="cta-polaroids">
-          <img
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500&auto=format&fit=crop"
-            className="polaroid p-1"
-            alt="Creators at work"
-          />
-          <img
-            src="https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=500&auto=format&fit=crop"
-            className="polaroid p-2"
-            alt="Brand collaboration"
-          />
-        </div>
-        <div className="cta-text-wrapper">
-          <h1 className="outline-text">CREATE WITH US</h1>
-          <h1 className="solid-text">JOIN DRIPLENS</h1>
-        </div>
-      </section>
-
-
+      </footer>
     </div>
   );
 }
-
-
