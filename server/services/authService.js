@@ -83,6 +83,7 @@ export const register = async ({ username, email, password, role, brand_name, in
       username:            sessionData.user.user_metadata?.username || username,
       role:                sessionData.user.user_metadata?.role || role,
       onboarding_complete: sessionData.user.user_metadata?.onboarding_complete || false,
+      is_verified:         role === 'creator' ? true : false,
     }
   };
 };
@@ -124,7 +125,7 @@ export const login = async ({ email: identifier, password }) => {
   // Also fetch profile to get onboarding_complete (more reliable than user_metadata)
   const { data: profile } = await supabase
     .from('profiles')
-    .select('onboarding_complete, username, role')
+    .select('onboarding_complete, username, role, is_verified')
     .eq('id', data.user.id)
     .single();
 
@@ -137,6 +138,7 @@ export const login = async ({ email: identifier, password }) => {
       username:            profile?.username || data.user.user_metadata?.username,
       role:                profile?.role || data.user.user_metadata?.role,
       onboarding_complete: profile?.onboarding_complete ?? data.user.user_metadata?.onboarding_complete ?? false,
+      is_verified:         profile?.is_verified ?? false,
     }
   };
 };

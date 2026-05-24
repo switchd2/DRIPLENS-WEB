@@ -529,7 +529,7 @@ export default function AuthPage() {
         if (userData.role === 'creator') {
           navigate('/onboarding/step-1', { replace: true });
         } else {
-          navigate('/dashboard/brand', { replace: true });
+          navigate('/verify/brand', { replace: true });
         }
       } else {
         const userData = await login(formData.email, formData.password);
