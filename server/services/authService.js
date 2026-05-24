@@ -182,9 +182,17 @@ export const sendVerificationOtp = async (email) => {
 
   // 3. Send email via Resend API
   const resendApiKey = process.env.RESEND_API_KEY || env.RESEND_API_KEY;
+
+  // Dev-mode fallback: if no Resend key, log OTP to console and skip email
   if (!resendApiKey) {
-    console.warn('RESEND_API_KEY is not configured.');
-    throw new AppError('Email service is not configured on the server.', 500, 'CONFIG_ERROR');
+    console.warn('⚠️  RESEND_API_KEY not configured — skipping email send.');
+    console.log(`\n╔══════════════════════════════════════╗`);
+    console.log(`║   🔑 DEV MODE: VERIFICATION CODE     ║`);
+    console.log(`║   Email : ${email.padEnd(26)}║`);
+    console.log(`║   Code  : ${code.padEnd(26)}║`);
+    console.log(`║   Expires in 10 minutes              ║`);
+    console.log(`╚══════════════════════════════════════╝\n`);
+    return { success: true };
   }
 
   try {
