@@ -710,28 +710,34 @@ export default function BrandDashboard() {
         <title>Brand Dashboard — Driplens</title>
       </Helmet>
 
-      {/* Floating Logo (Left Side) - Doubles as Message Chat Drawer Toggle */}
-      <div className="fixed left-6 top-6 z-50 flex items-center gap-2">
-        <button 
-          onClick={() => {
-            setIsChatOpen(!isChatOpen);
-            // Auto select first thread if none is active
-            if (!activeChatId && chatThreads.length > 0) {
-              setActiveChatId(chatThreads[0].id);
-            }
-          }}
-          className="w-12 h-12 bg-black text-white border-2 border-black rounded-full flex items-center justify-center font-black text-sm tracking-tighter hover:scale-105 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0044ff] hover:border-[#0044ff] active:scale-95 group relative"
-        >
-          <span>DL</span>
-          {unreadMessages > 0 && (
-            <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-bounce border-2 border-white">
-              {unreadMessages}
-            </span>
-          )}
-        </button>
-        <span className="hidden md:inline-block text-[9px] font-black uppercase tracking-widest text-black bg-white border-2 border-black px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-          Messages
-        </span>
+      {/* Top Left Navigation (Logo & Messages) */}
+      <div className="fixed left-6 top-6 z-50 flex items-center gap-4">
+        <Link to="/" className="text-2xl font-black tracking-tighter text-black uppercase hover:text-[#0044ff] transition-colors hidden sm:block">
+          DRIPLENS
+        </Link>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => {
+              setIsChatOpen(!isChatOpen);
+              // Auto select first thread if none is active
+              if (!activeChatId && chatThreads.length > 0) {
+                setActiveChatId(chatThreads[0].id);
+              }
+            }}
+            className="w-10 h-10 bg-black text-white border-2 border-black rounded-full flex items-center justify-center font-black text-sm hover:scale-105 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0044ff] hover:border-[#0044ff] active:scale-95 group relative"
+            aria-label="Messages"
+          >
+            <MessageSquare size={16} />
+            {unreadMessages > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-bounce border-2 border-white">
+                {unreadMessages}
+              </span>
+            )}
+          </button>
+          <span className="hidden lg:inline-block text-[9px] font-black uppercase tracking-widest text-black bg-white border-2 border-black px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+            Messages
+          </span>
+        </div>
       </div>
 
       {/* Floating Glassmorphic Top Navbar */}

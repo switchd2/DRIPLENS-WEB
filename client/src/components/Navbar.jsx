@@ -23,13 +23,13 @@ export default function Navbar() {
           bgColor: '#f9f9f9',
           textColor: '#000',
           links: [
-            { label: 'Dashboard', href: isLoggedIn ? (user?.role === 'brand' ? '/dashboard/brand' : '/dashboard/creator') : '/auth' },
+            { label: 'Dashboard', href: '/auth' },
             { label: 'Marketplace', href: '/opportunities' }
           ]
         },
         {
           label: 'Explore',
-          bgColor: '#ccff00',
+          bgColor: '#CAFF00',
           textColor: '#000',
           links: [
             { label: 'Success Stories', href: '/driplens' },
@@ -48,34 +48,33 @@ export default function Navbar() {
       ];
     }
 
-    if (user?.role === 'brand') {
+    const isClient = user?.role === 'client' || user?.role === 'brand';
+
+    if (isClient) {
       return [
         {
           label: 'Platform',
           bgColor: '#f9f9f9',
           textColor: '#000',
           links: [
-            { label: 'Dashboard', href: '/dashboard/brand' },
-            { label: 'Post Opportunity', href: '/opportunities/new' }
+            { label: 'Dashboard', href: '/dashboard/brand' }
           ]
         },
         {
-          label: 'Workflow',
-          bgColor: '#ccff00',
+          label: 'Explore',
+          bgColor: '#CAFF00',
           textColor: '#000',
           links: [
-            { label: 'Active Campaigns', href: '/dashboard/brand?tab=campaigns' },
-            { label: 'Applications', href: '/dashboard/brand?tab=applications', badge: user?.counts?.newApplications },
-            { label: 'Messages', href: '/messages', badge: user?.counts?.unreadMessages }
+            { label: 'Explore', href: '/explore' }
           ]
         },
         {
-          label: 'Account',
+          label: 'Company',
           bgColor: '#111',
           textColor: '#fff',
           links: [
-            { label: 'Public Profile', href: `/brand/${user?.id || ''}` },
-            { label: 'Settings', href: '/settings' },
+            { label: 'Projects', href: '/dashboard/brand?tab=projects' },
+            { label: 'Payment', href: '/dashboard/brand?tab=payments' },
             { label: 'Logout', onClick: handleLogout }
           ]
         }
@@ -89,28 +88,24 @@ export default function Navbar() {
         bgColor: '#f9f9f9',
         textColor: '#000',
         links: [
-          { label: 'Dashboard', href: '/dashboard/creator' },
-          { label: 'Explore Brands', href: '/brands' }
+          { label: 'Dashboard', href: '/dashboard/creator' }
         ]
       },
       {
-        label: 'Workflow',
-        bgColor: '#ccff00',
+        label: 'Explore',
+        bgColor: '#CAFF00',
         textColor: '#000',
         links: [
-          { label: 'My Applications', href: '/applied' },
-          { label: 'Active Progress', href: '/progress' },
-          { label: 'Messages', href: '/messages', badge: user?.counts?.unreadMessages }
+          { label: 'Explore for Brand', href: '/brands' }
         ]
       },
       {
-        label: 'Account',
+        label: 'Company',
         bgColor: '#111',
         textColor: '#fff',
         links: [
-          { label: 'My Portfolio', href: `/profile/${user?.id || ''}` },
-          { label: 'Earnings', href: '/earnings' },
-          { label: 'Settings', href: '/settings' },
+          { label: 'Opportunities', href: '/opportunities' },
+          { label: 'Payment', href: '/earnings' },
           { label: 'Logout', onClick: handleLogout }
         ]
       }
@@ -119,7 +114,8 @@ export default function Navbar() {
 
   const getCtaProps = () => {
     if (!isLoggedIn) return { label: 'Get Started', onClick: () => navigate('/auth') };
-    if (user?.role === 'brand') return { label: 'Post Job', onClick: () => navigate('/opportunities/new') };
+    const isClient = user?.role === 'client' || user?.role === 'brand';
+    if (isClient) return { label: 'Dashboard', onClick: () => navigate('/dashboard/brand') };
     return { label: 'Dashboard', onClick: () => navigate('/dashboard/creator') };
   };
 
