@@ -57,4 +57,41 @@ router.post('/verify-verification-otp', protect, authLimiter, async (req, res, n
   } catch (err) { next(err); }
 });
 
+import { supabase } from '../../utils/supabase.js';
+
+router.get('/diagnostic', async (req, res) => {
+  try {
+    const testEmail = 'test-' + Date.now() + '@driplens.com';
+    const { data: insertData, error: insertError } = await supabase.from('verification_otps').upsert({
+      email: testEmail,
+      code: '123456',
+      expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+    }, { onConflict: 'email' });
+
+    // Clean up
+    await supabase.from('verification_otps').delete().eq('email', testEmail);
+
+    return res.status(200).json({
+      success: true,
+      message: "Diagnostics complete",
+      connection: {
+        url: supabase.supabaseUrl ? supabase.supabaseUrl.substring(0, 20) + '...' : null
+      },
+      upsert: {
+        error: insertError ? {
+          message: insertError.message,
+          code: insertError.code,
+          details: insertError.details,
+          hint: insertError.hint
+        } : null
+      }
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: err.message
+    });
+  }
+});
+
 export default router;
