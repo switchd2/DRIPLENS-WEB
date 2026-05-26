@@ -70,7 +70,7 @@ export default function OpportunitiesPage() {
       </section>
 
       {/* Filter Section */}
-      <section className="bg-white border-b border-black sticky top-0 z-40">
+      <section className="bg-white border-b border-black sticky top-20 md:top-24 z-40">
         <div className="max-w-[1400px] mx-auto px-8 py-4 flex flex-col md:flex-row md:items-center gap-6 overflow-x-auto no-scrollbar">
           
           <div className="flex items-center gap-2 text-[#6B7280] text-[12px] md:text-[14px] font-bold uppercase tracking-[0.1em] shrink-0">

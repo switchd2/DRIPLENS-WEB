@@ -527,62 +527,134 @@ export default function CreatorDashboard() {
         <title>Creator Dashboard — Driplens</title>
       </Helmet>
 
-      {/* Floating Logo (Left Side) - Doubles as Message Chat Drawer Toggle */}
-      <div className="fixed left-6 top-6 z-50 flex items-center gap-2">
-        <button 
-          onClick={() => {
-            setIsChatOpen(!isChatOpen);
-            if (!activeChatId && chatThreads.length > 0) {
-              setActiveChatId(chatThreads[0].id);
-            }
-          }}
-          className="w-12 h-12 bg-black text-white border-2 border-black rounded-full flex items-center justify-center font-black text-sm tracking-tighter hover:scale-105 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0044ff] hover:border-[#0044ff] active:scale-95 group relative"
-        >
-          <span>DL</span>
-          {unreadMessages > 0 && (
-            <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-bounce border-2 border-white">
-              {unreadMessages}
-            </span>
-          )}
-        </button>
-        <span className="hidden md:inline-block text-[9px] font-black uppercase tracking-widest text-black bg-white border-2 border-black px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-          Messages
-        </span>
-      </div>
-
-      {/* Floating Glassmorphic Top Navbar */}
-      <div className="fixed top-6 left-0 right-0 z-40 flex justify-center px-4">
-        <nav className="backdrop-blur-md bg-white/75 border-2 border-black rounded-full py-2 px-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex gap-1 items-center max-w-2xl w-full">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 text-center py-2.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all ${
-                activeTab === tab.id
-                  ? 'bg-black text-white'
-                  : 'text-black hover:bg-black/5'
-              }`}
+      {/* --- DESKTOP HEADER (Visible on md and up) --- */}
+      <div className="hidden md:block">
+        {/* Top Left Navigation (Logo & Messages) */}
+        <div className="fixed left-6 top-6 z-50 flex items-center gap-4">
+          <Link to="/" className="text-2xl font-black tracking-tighter text-black uppercase hover:text-[#0044ff] transition-colors hidden sm:block">
+            DRIPLENS
+          </Link>
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => {
+                setIsChatOpen(!isChatOpen);
+                if (!activeChatId && chatThreads.length > 0) {
+                  setActiveChatId(chatThreads[0].id);
+                }
+              }}
+              className="w-10 h-10 bg-black text-white border-2 border-black rounded-full flex items-center justify-center font-black text-sm hover:scale-105 transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-[#0044ff] hover:border-[#0044ff] active:scale-95 group relative"
+              aria-label="Messages"
             >
-              {tab.label}
+              <MessageSquare size={16} />
+              {unreadMessages > 0 && (
+                <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] font-black rounded-full flex items-center justify-center animate-bounce border-2 border-white">
+                  {unreadMessages}
+                </span>
+              )}
             </button>
-          ))}
-        </nav>
+            <span className="hidden lg:inline-block text-[9px] font-black uppercase tracking-widest text-black bg-white border-2 border-black px-3 py-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              Messages
+            </span>
+          </div>
+        </div>
+
+        {/* Floating Glassmorphic Top Navbar */}
+        <div className="fixed top-6 left-0 right-0 z-40 flex justify-center px-4">
+          <nav className="backdrop-blur-md bg-white/75 border-2 border-black rounded-full py-2 px-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex gap-1 items-center max-w-2xl w-full">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-1 text-center py-2.5 rounded-full text-[9px] sm:text-xs font-black uppercase tracking-wider transition-all ${
+                  activeTab === tab.id
+                    ? 'bg-black text-white'
+                    : 'text-black hover:bg-black/5'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+
+        {/* Top Right Action Buttons */}
+        <div className="fixed right-6 top-6 z-50 flex items-center gap-2">
+          <Link 
+            to="/settings" 
+            className="p-3 border-2 border-black hover:bg-black hover:text-white transition-all text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none bg-white"
+          >
+            <Settings size={16} />
+          </Link>
+          <button 
+            onClick={logout} 
+            className="px-5 py-3 border-2 border-black bg-black text-white hover:bg-red-500 hover:border-red-500 transition-all text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+          >
+            Logout
+          </button>
+        </div>
       </div>
 
-      {/* Top Right Action Buttons */}
-      <div className="fixed right-6 top-6 z-50 flex items-center gap-2">
-        <Link 
-          to="/settings" 
-          className="p-3 border-2 border-black hover:bg-black hover:text-white transition-all text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none bg-white"
-        >
-          <Settings size={16} />
-        </Link>
-        <button 
-          onClick={logout} 
-          className="px-5 py-3 border-2 border-black bg-black text-white hover:bg-red-500 hover:border-red-500 transition-all text-xs font-black uppercase tracking-wider shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
-        >
-          Logout
-        </button>
+      {/* --- MOBILE HEADER (Visible on screens < md) --- */}
+      <div className="block md:hidden">
+        {/* Unified sticky top bar */}
+        <div className="fixed top-0 left-0 right-0 h-16 bg-white border-b-2 border-black px-4 flex items-center justify-between z-50">
+          <Link to="/" className="text-xl font-black tracking-tighter text-black uppercase">
+            DRIPLENS
+          </Link>
+          <div className="flex items-center gap-2">
+            {/* Messages */}
+            <button 
+              onClick={() => {
+                setIsChatOpen(!isChatOpen);
+                if (!activeChatId && chatThreads.length > 0) {
+                  setActiveChatId(chatThreads[0].id);
+                }
+              }}
+              className="w-9 h-9 bg-black text-white border-2 border-black rounded-full flex items-center justify-center font-black text-xs hover:scale-105 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] group relative"
+              aria-label="Messages"
+            >
+              <MessageSquare size={14} />
+              {unreadMessages > 0 && (
+                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 text-white text-[8px] font-black rounded-full flex items-center justify-center border border-white">
+                  {unreadMessages}
+                </span>
+              )}
+            </button>
+            {/* Settings */}
+            <Link 
+              to="/settings" 
+              className="p-2 border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-xs"
+            >
+              <Settings size={14} />
+            </Link>
+            {/* Logout */}
+            <button 
+              onClick={logout} 
+              className="px-3 py-2.5 border-2 border-black bg-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-[9px] font-black uppercase tracking-wider"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* Sticky tabs bar below top bar */}
+        <div className="fixed top-16 left-0 right-0 h-12 bg-white border-b border-gray-200 px-4 flex items-center z-40 overflow-x-auto no-scrollbar">
+          <div className="flex gap-1.5 py-1 whitespace-nowrap">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all border ${
+                  activeTab === tab.id
+                    ? 'bg-black border-black text-white'
+                    : 'bg-white border-gray-200 text-black hover:bg-black/5'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Chat Drawer Side Panel */}
@@ -706,7 +778,7 @@ export default function CreatorDashboard() {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="flex-grow pt-28 px-8 md:px-16 pb-12">
+      <main className="flex-grow pt-32 md:pt-28 px-4 md:px-16 pb-12">
         <div className="max-w-5xl mx-auto">
           <AnimatePresence mode="wait">
             <motion.div

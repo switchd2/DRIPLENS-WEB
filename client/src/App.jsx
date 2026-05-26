@@ -8,7 +8,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ClickSpark from './components/ClickSpark';
 import ScrollToTop from './components/ScrollToTop';
-import DashboardNav from './components/DashboardNav';
+
 
 
 // Pages
@@ -81,6 +81,7 @@ function DashboardRedirect() {
   if (loading) return <div className="h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-black border-t-transparent rounded-full animate-spin" /></div>;
   if (!user) return <Navigate to="/auth" replace />;
   
+  if (!user.role) return <Navigate to="/" replace />;
   const targetPath = user.role === 'brand' ? '/dashboard/brand' : '/dashboard/creator';
   return <Navigate to={targetPath} replace />;
 }
@@ -103,8 +104,8 @@ const AppContent = () => {
 
   return (
     <div className={isDriplens ? "bg-[#050508] min-h-screen text-white" : "min-h-screen flex flex-col bg-[var(--color-brand-bg)] text-[var(--color-brand-body)]"}>
-      {showNavbar ? <Navbar /> : (isDashboard ? <DashboardNav /> : null)}
-      <main className="flex-grow pt-24 md:pt-32">
+      {showNavbar && <Navbar />}
+      <main className={`flex-grow${isDashboard ? '' : ' pt-24 md:pt-32'}`}>
         <Routes>
           {/* Driplens Landing */}
           <Route path="/driplens" element={<DriplensLanding />} />
@@ -146,12 +147,12 @@ const AppContent = () => {
           <Route path="/terms" element={<TermsPage />} />
 
           {/* Protected — any logged-in user */}
-          <Route path="/dm/:id" element={<DirectMessagePage />} />
-          <Route path="/profile/:id/pricing" element={<CreatorPricingPage />} />
-          <Route path="/profile/:id/checkout" element={<CheckoutPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/progress" element={<ProjectProgressPage />} />
-          <Route path="/progress/:projectId" element={<ProjectProgressPage />} />
+          <Route path="/dm/:id" element={<ProtectedRoute><DirectMessagePage /></ProtectedRoute>} />
+          <Route path="/profile/:id/pricing" element={<ProtectedRoute><CreatorPricingPage /></ProtectedRoute>} />
+          <Route path="/profile/:id/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/progress" element={<ProtectedRoute><ProjectProgressPage /></ProtectedRoute>} />
+          <Route path="/progress/:projectId" element={<ProtectedRoute><ProjectProgressPage /></ProtectedRoute>} />
           
           <Route path="/profile/edit" element={<Navigate to="/settings" replace />} />
           <Route path="/settings" element={

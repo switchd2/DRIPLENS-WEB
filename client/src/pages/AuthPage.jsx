@@ -424,7 +424,7 @@ const AuthForm = ({ mode, selectedRole, formData, handleChange, handleSubmit, er
             <div className="flex-grow border-t border-gray-200"></div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <button type="button" className="p-4 border-2 border-black font-bold text-xs uppercase hover:bg-gray-50">Google</button>
+            <button type="button" onClick={onGoogleSignIn} className="p-4 border-2 border-black font-bold text-xs uppercase hover:bg-gray-50">Google</button>
             <button type="button" className="p-4 border-2 border-black font-bold text-xs uppercase hover:bg-gray-50">Instagram</button>
           </div>
         </div>
@@ -546,6 +546,21 @@ export default function AuthPage() {
       setApiError(err.message || 'Authentication failed');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      localStorage.setItem('oauth_role', selectedRole || 'creator');
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth`
+        }
+      });
+      if (error) throw error;
+    } catch (err) {
+      setApiError(err.message || 'Google Sign-In failed');
     }
   };
 
