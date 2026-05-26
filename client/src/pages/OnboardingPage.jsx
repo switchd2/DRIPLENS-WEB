@@ -693,6 +693,13 @@ export default function OnboardingPage() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   useEffect(() => {
     if (user?.onboarding_complete && !done) {
@@ -808,9 +815,10 @@ export default function OnboardingPage() {
         <div style={{
           width: '100%', maxWidth: 520,
           border: '1.5px solid #E5E7EB', borderRadius: 8,
-          padding: '36px 36px',
+          padding: isMobile ? '24px 16px' : '36px 36px',
           background: '#fff',
           boxShadow: '0 4px 24px rgba(0,0,0,0.05)',
+          boxSizing: 'border-box',
         }}>
           {apiError && (
             <div style={{ color: 'red', fontFamily: 'Poppins', fontSize: 13, marginBottom: 12, padding: '10px 14px', border: '1px solid red', borderRadius: 4 }}>

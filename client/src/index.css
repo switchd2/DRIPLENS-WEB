@@ -512,3 +512,26 @@
   outline: 2px solid #0046FF;
   outline-offset: 2px;
 }
+
+@media (max-width: 767px) {
+  .wdc-card {
+    max-height: 95vh !important;
+    overflow-y: auto !important;
+  }
+  .wdc-image-col {
+    flex: none !important;
+    min-height: auto !important;
+    height: 320px !important;
+  }
+  .wdc-content-col {
+    padding: 24px 20px 20px !important;
+    overflow-y: visible !important;
+  }
+  .wdc-cta-area {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  .wdc-message-btn {
+    width: 100% !important;
+  }
+}

@@ -198,7 +198,7 @@ body, html {
 
 .text-block h1 {
   font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 8rem;
+  font-size: clamp(3.2rem, 12vw, 8rem);
   color: var(--agency-white);
   margin: 0;
   line-height: 1.1;
@@ -232,7 +232,7 @@ body, html {
 
 .agency-about-header h2 {
   font-family: 'Impact', 'Arial Black', sans-serif;
-  font-size: 4rem;
+  font-size: clamp(2rem, 6vw, 4rem);
   line-height: 1.1;
   max-width: 900px;
   margin-bottom: 4rem;
@@ -612,3 +612,87 @@ body, html {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px var(--agency-blue);
 }
+
+/* ── RESPONSIVE MEDIA QUERIES ── */
+
+@media (max-width: 1024px) {
+  .agency-footer {
+    grid-template-columns: 1fr;
+  }
+  .footer-left {
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding: 3rem 2rem;
+  }
+  .footer-center {
+    grid-template-columns: 1fr;
+    border-right: none;
+    border-bottom: 1px solid #333;
+    padding: 3rem 2rem;
+    gap: 3rem;
+  }
+  @media (min-width: 640px) {
+    .footer-center {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .footer-right {
+    padding: 3rem 2rem;
+  }
+  .social-sidebar {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .text-block-1 {
+    transform: rotate(-3deg) translateX(0) !important;
+  }
+  .text-block-2 {
+    transform: rotate(2deg) translateX(0) !important;
+  }
+  .text-block-sub {
+    transform: rotate(1deg) translateY(10px) !important;
+  }
+  
+  .agency-team-grid {
+    grid-template-columns: 1fr;
+  }
+  .team-cell {
+    border-right: none;
+    border-bottom: var(--agency-border);
+  }
+  .team-cell:last-child {
+    border-bottom: none;
+  }
+
+  .cta-polaroids {
+    display: none;
+  }
+  .agency-cta {
+    padding: 6rem 1.5rem;
+    min-height: auto;
+  }
+
+  .agency-auth-page {
+    flex-direction: column;
+  }
+  .auth-left {
+    flex: none;
+    padding: 3rem 2rem;
+    height: auto;
+    min-height: auto;
+    border-right: none;
+    border-bottom: var(--agency-border);
+  }
+  .auth-left h1 {
+    font-size: clamp(3rem, 10vw, 5rem) !important;
+  }
+  .auth-right {
+    padding: 3rem 1.5rem;
+  }
+}
+

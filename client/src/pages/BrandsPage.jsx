@@ -76,7 +76,7 @@ export default function BrandsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-y border-[#EEEEEE]">
+      <div className="sticky top-20 md:top-24 z-40 bg-white/80 backdrop-blur-md border-y border-[#EEEEEE]">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-8 overflow-x-auto no-scrollbar w-full md:w-auto">
             {filters.map((filter) => (

@@ -188,7 +188,7 @@ export default function MessagingPage() {
   };
 
   return (
-    <div style={{ height: 'calc(100vh - 128px)', display: 'flex', background: '#FFF', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
+    <div style={{ height: '100vh', display: 'flex', background: '#FFF', overflow: 'hidden', fontFamily: 'Inter, sans-serif' }}>
       <Helmet><title>Messages — Driplens</title></Helmet>
 
       {/* ── Left Sidebar ────────────────────────────────────────────────────── */}

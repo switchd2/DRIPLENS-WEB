@@ -30,6 +30,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
 
   // Wrong role for this route → send to their dashboard
   if (requiredRole && user?.role !== requiredRole) {
+    if (!user?.role) return <Navigate to="/" replace />;
     return <Navigate to={`/dashboard/${user?.role}`} replace />;
   }
 

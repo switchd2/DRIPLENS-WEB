@@ -57,7 +57,7 @@ export default function BrandProfilePage() {
       </Helmet>
 
       {/* Breadcrumb & Quick Actions Bar */}
-      <div className="border-b border-[#F5F5F5] sticky top-0 z-50 bg-white/80 backdrop-blur-md">
+      <div className="border-b border-[#F5F5F5] sticky top-20 md:top-24 z-50 bg-white/80 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link to="/brands" className="inline-flex items-center gap-2 text-[9px] uppercase tracking-[0.4em] font-bold text-[#AAAAAA] hover:text-black transition-colors group">
             <ArrowLeft className="w-3 h-3 group-hover:-translate-x-0.5 transition-transform" /> Back to Brands

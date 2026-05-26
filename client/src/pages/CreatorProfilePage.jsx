@@ -124,7 +124,7 @@ export default function CreatorProfilePage() {
     <div className="bg-white min-h-screen pb-20 font-sans text-[#111111]">
 
       {/* ── Minimal Top Navigation ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center bg-white sticky top-0 z-30 border-b border-zinc-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center bg-white sticky top-20 md:top-24 z-30 border-b border-zinc-50">
         <Link to="/explore" className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-colors flex items-center gap-2">
           <span>←</span> Back
         </Link>
