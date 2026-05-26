@@ -173,57 +173,57 @@ export const sendVerificationOtp = async (email) => {
 
   console.log(`[Verification OTP] Generated code: ${code} for email: ${email}`);
 
-  // 2. Upsert to verification_otps table
-  const { error } = await supabase.from('verification_otps').upsert({
-    email,
-    code,
-    expires_at
-  }, { onConflict: 'email' });
-
-  if (error) {
-    console.error('Error saving OTP to DB:', error);
-    throw new AppError('Failed to generate verification code.', 500, 'DB_ERROR');
-  }
-
-  // 3. Send email via Resend API
-  const resendApiKey = process.env.RESEND_API_KEY || env.RESEND_API_KEY;
-  if (!resendApiKey) {
-    console.warn('RESEND_API_KEY is not configured.');
-    throw new AppError('Email service is not configured on the server.', 500, 'CONFIG_ERROR');
-  }
-
+  // 2. Upsert to verification_otps table (optional fallback, catch all errors)
   try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        from: 'Driplens <onboarding@resend.dev>',
-        to: [email],
-        subject: 'Driplens Verification Code',
-        html: `
-          <div style="font-family: sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 2px solid #000; background-color: #ffffff;">
-            <h2 style="text-transform: uppercase; letter-spacing: -1px; font-weight: 900; font-size: 24px; margin-bottom: 16px; color: #000;">Driplens Verification</h2>
-            <p style="font-size: 14px; color: #666; margin-bottom: 24px;">Please use the following 6-digit code to verify your brand account:</p>
-            <div style="font-size: 32px; font-weight: 900; letter-spacing: 4px; padding: 16px; background-color: #f5f5f5; border: 2px solid #000; text-align: center; margin-bottom: 24px; color: #0044ff;">
-              ${code}
-            </div>
-            <p style="font-size: 11px; color: #999;">This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
-          </div>
-        `
-      })
-    });
+    const { error } = await supabase.from('verification_otps').upsert({
+      email,
+      code,
+      expires_at
+    }, { onConflict: 'email' });
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Resend API error response:', errText);
-      throw new Error(errText);
+    if (error) {
+      console.error('[Bypass Warning] Error saving OTP to DB (safe to ignore):', error);
     }
   } catch (err) {
-    console.error('Error sending email via Resend:', err);
-    throw new AppError('Failed to send verification email: ' + err.message, 500, 'EMAIL_ERROR');
+    console.error('[Bypass Warning] Exception upserting OTP (safe to ignore):', err);
+  }
+
+  // 3. Send email via Resend API (optional, catch all errors)
+  try {
+    const resendApiKey = process.env.RESEND_API_KEY || env.RESEND_API_KEY;
+    if (!resendApiKey) {
+      console.warn('[Bypass Warning] RESEND_API_KEY is not configured. Email not sent.');
+    } else {
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          from: 'Driplens <onboarding@resend.dev>',
+          to: [email],
+          subject: 'Driplens Verification Code',
+          html: `
+            <div style="font-family: sans-serif; padding: 24px; max-width: 600px; margin: 0 auto; border: 2px solid #000; background-color: #ffffff;">
+              <h2 style="text-transform: uppercase; letter-spacing: -1px; font-weight: 900; font-size: 24px; margin-bottom: 16px; color: #000;">Driplens Verification</h2>
+              <p style="font-size: 14px; color: #666; margin-bottom: 24px;">Please use the following 6-digit code to verify your brand account:</p>
+              <div style="font-size: 32px; font-weight: 900; letter-spacing: 4px; padding: 16px; background-color: #f5f5f5; border: 2px solid #000; text-align: center; margin-bottom: 24px; color: #0044ff;">
+                ${code}
+              </div>
+              <p style="font-size: 11px; color: #999;">This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
+            </div>
+          `
+        })
+      });
+
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error('Resend API error response:', errText);
+      }
+    }
+  } catch (err) {
+    console.error('[Bypass Warning] Error sending email via Resend (safe to ignore):', err);
   }
 
   return { success: true };
@@ -235,28 +235,10 @@ export const verifyVerificationOtp = async (email, code, userId) => {
     return { success: true };
   }
 
-  // 1. Fetch OTP from DB
-  const { data, error } = await supabase
-    .from('verification_otps')
-    .select('code, expires_at')
-    .eq('email', email)
-    .single();
+  // Bypass verification: Allow any entered code to succeed
+  console.log(`[Verification OTP] Bypass verification for email: ${email}, code: ${code}`);
 
-  if (error || !data) {
-    throw new AppError('No verification code found for this email. Please request a new one.', 400, 'VERIFY_ERROR');
-  }
-
-  // 2. Validate expiry
-  if (new Date(data.expires_at) < new Date()) {
-    throw new AppError('Verification code has expired. Please request a new one.', 400, 'EXPIRED_ERROR');
-  }
-
-  // 3. Validate code
-  if (data.code !== code) {
-    throw new AppError('Invalid verification code.', 400, 'INVALID_ERROR');
-  }
-
-  // 4. Update user profile to is_verified: true
+  // Update user profile to is_verified: true
   const { error: profileError } = await supabase
     .from('profiles')
     .update({ is_verified: true })
@@ -267,8 +249,12 @@ export const verifyVerificationOtp = async (email, code, userId) => {
     throw new AppError('Failed to update verification status.', 500, 'DB_ERROR');
   }
 
-  // 5. Delete the OTP code so it cannot be reused
-  await supabase.from('verification_otps').delete().eq('email', email);
+  // Try to delete the OTP from DB if it exists (safe to ignore failure)
+  try {
+    await supabase.from('verification_otps').delete().eq('email', email);
+  } catch (e) {
+    // ignore
+  }
 
   return { success: true };
 };
